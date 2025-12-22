@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="Faiz — Portfolio in progress. Contact info and links." />
+  <title>Faiz — Building</title>
+
+  <style>
+    :root{
+      /* Apple-like monochrome palette */
+      --bg0:#ffffff;
+      --bg1:#f5f5f7;
+      --bg2:#e9e9ec;
+      --text:#0b0b0f;
+      --muted:rgba(11,11,15,.62);
+      --faint:rgba(11,11,15,.14);
+      --card:#ffffff;
+      --border:rgba(0,0,0,.10);
+      --shadow: 0 30px 70px rgba(0,0,0,.08);
+      --radius: 22px;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+
+    body{
+      margin:0;
+      color:var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      background:
+        radial-gradient(1100px 760px at 18% 18%, rgba(0,0,0,.10), transparent 60%),
+        radial-gradient(900px 640px at 82% 72%, rgba(0,0,0,.09), transparent 60%),
+        radial-gradient(800px 520px at 50% 115%, rgba(0,0,0,.06), transparent 62%),
+        linear-gradient(180deg, var(--bg0), var(--bg1) 55%, var(--bg2));
+    }
+
+    /* Ultra-subtle noise to avoid flatness */
+    .noise{
+      pointer-events:none;
+      position:fixed;
+      inset:0;
+      opacity:.045;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
+      background-size:220px 220px;
+    }
+
+    .wrap{
+      min-height:100%;
+      display:grid;
+      place-items:center;
+      padding: 28px;
+    }
+
+    .card{
+      width:min(820px, 96vw);
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(255,255,255,1), rgba(245,245,247,.94));
+      border: 1px solid var(--border);
+      box-shadow: 0 1px 0 rgba(255,255,255,.75) inset, var(--shadow);
+      overflow:hidden;
+    }
+
+    .inner{
+      padding: 34px 32px 26px;
+    }
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border:1px solid rgba(0,0,0,.10);
+      background: rgba(0,0,0,.03);
+      color: rgba(11,11,15,.72);
+      font-size: 13px;
+      letter-spacing:.01em;
+    }
+
+    .dot{
+      width:8px;height:8px;border-radius:50%;
+      background: #f59e0b; /* Yellowish orange */
+      opacity:.9;
+      animation: blink 2s infinite;
+    }
+    
+    @keyframes blink {
+      0% { opacity: 0.9; }
+      50% { opacity: 0.4; }
+      100% { opacity: 0.9; }
+    }
+
+    h1{
+      margin: 16px 0 10px;
+      font-size: clamp(38px, 5vw, 60px);
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      font-weight: 700;
+    }
+
+    .sub{
+      margin: 0 0 10px;
+      font-size: 18px;
+      line-height: 1.6;
+      color: var(--muted);
+      max-width: 62ch;
+    }
+
+    .now{
+      margin: 0 0 18px;
+      font-size: 14px;
+      line-height: 1.6;
+      color: rgba(11,11,15,.60);
+    }
+
+    .now a{
+      color: rgba(11,11,15,.86);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(11,11,15,.22);
+      padding-bottom: 1px;
+    }
+
+    .now a:hover{
+      border-bottom-color: rgba(11,11,15,.55);
+    }
+
+    .status{
+      margin: 18px 0 18px;
+      padding: 16px;
+      border: 1px solid rgba(0,0,0,.10);
+      border-radius: 18px;
+      background: linear-gradient(180deg, rgba(0,0,0,.02), rgba(0,0,0,.01));
+      display:flex;
+      flex-direction:column;
+      gap: 12px;
+    }
+
+    .status-row{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap: 14px;
+      flex-wrap:wrap;
+    }
+
+    .status-title{
+      font-size: 14px;
+      color: rgba(11,11,15,.70);
+    }
+
+    .hint{
+      font-size: 12px;
+      color: rgba(11,11,15,.55);
+      margin-top: 4px;
+    }
+
+    /* Backend-themed loader: queue depth draining (minimal) */
+    .queueViz{
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(0,0,0,.08);
+      background: linear-gradient(180deg, rgba(0,0,0,.03), rgba(0,0,0,.015));
+      overflow: hidden;
+    }
+
+    .qbars{
+      height: 28px;
+      width: 100%;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 0;
+    }
+
+    .qbar{
+      width: 6px;
+      flex: 0 0 6px;
+      height: 18px;
+      border-radius: 999px;
+      background: rgba(11,11,15,.80);
+      opacity: .85;
+      animation: drain 1.9s ease-in-out infinite;
+    }
+
+    /* Stagger to feel like backlog draining (repeat every 14 bars) */
+    .qbar:nth-child(14n + 1){ animation-delay: 0.00s; }
+    .qbar:nth-child(14n + 2){ animation-delay: 0.10s; }
+    .qbar:nth-child(14n + 3){ animation-delay: 0.20s; }
+    .qbar:nth-child(14n + 4){ animation-delay: 0.30s; }
+    .qbar:nth-child(14n + 5){ animation-delay: 0.40s; }
+    .qbar:nth-child(14n + 6){ animation-delay: 0.50s; }
+    .qbar:nth-child(14n + 7){ animation-delay: 0.60s; }
+    .qbar:nth-child(14n + 8){ animation-delay: 0.70s; }
+    .qbar:nth-child(14n + 9){ animation-delay: 0.80s; }
+    .qbar:nth-child(14n + 10){ animation-delay: 0.90s; }
+    .qbar:nth-child(14n + 11){ animation-delay: 1.00s; }
+    .qbar:nth-child(14n + 12){ animation-delay: 1.10s; }
+    .qbar:nth-child(14n + 13){ animation-delay: 1.20s; }
+    .qbar:nth-child(14n + 14){ animation-delay: 1.30s; }
+
+    @keyframes drain{
+      0%{ height: 20px; opacity: .85; }
+      45%{ height: 6px; opacity: .55; }
+      100%{ height: 20px; opacity: .85; }
+    }
+
+    .cta{
+      display:flex;
+      flex-wrap:wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    a.btn{
+      display:inline-flex;
+      align-items:center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(0,0,0,.12);
+      background: rgba(0,0,0,.02);
+      color: rgba(11,11,15,.92);
+      text-decoration:none;
+      font-size: 14px;
+      transition: transform .12s ease, background .12s ease, border-color .12s ease;
+    }
+
+    a.btn:hover{
+      transform: translateY(-1px);
+      background: rgba(0,0,0,.04);
+      border-color: rgba(0,0,0,.22);
+    }
+
+    a.btn:focus-visible{
+      outline: 2px solid rgba(0,0,0,.55);
+      outline-offset: 3px;
+    }
+
+    .icon{ width:18px;height:18px; color: rgba(11,11,15,.85); }
+
+    .meta{
+      display:flex;
+      justify-content:space-between;
+      gap: 12px;
+      margin-top: 18px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(0,0,0,.10);
+      color: rgba(11,11,15,.55);
+      font-size: 12px;
+      flex-wrap:wrap;
+    }
+
+    .meta a{ color: rgba(11,11,15,.68); text-decoration:none; }
+    .meta a:hover{ color: rgba(11,11,15,.92); }
+
+    /* Reduce motion */
+    @media (prefers-reduced-motion: reduce){
+      .qbar{ animation:none; height: 12px; opacity: .75; }
+    }
+
+    @media (max-width: 640px){
+      .inner{ padding: 26px 18px 18px; }
+      .sub{ font-size: 16px; }
+      .qbars{ gap: 4px; height: 26px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="noise" aria-hidden="true"></div>
+
+  <div class="wrap">
+    <main class="card" aria-label="Under construction landing page">
+      <div class="inner">
+        <div class="pill"><span class="dot" aria-hidden="true"></span> Site in progress</div>
+
+        <h1>Hi, I’m Faiz.</h1>
+        <p class="sub">Backend & Video Platform Engineer. I design backend platforms for video workflows, reliability, and cost.</p>
+        <p class="now">Now: Building <a href="https://tessact.ai" target="_blank" rel="noreferrer">Tessact AI</a></p>
+
+        <section class="status" role="status" aria-live="polite">
+          <div class="status-row">
+            <div>
+              <div class="status-title">Site build</div>
+              <div class="hint">Deploying updates and writing case studies</div>
+            </div>
+            <div class="hint">Rolling out section by section</div>
+          </div>
+
+          <div class="queueViz" aria-hidden="true">
+            <div class="qbars">
+              <span class="qbar"></span><span class="qbar"></span><span class="qbar"></span><span class="qbar"></span><span class="qbar"></span><span class="qbar"></span><span class="qbar"></span><span class="qbar"></span><span class="qbar"></span><span class="qbar"></span><span class="qbar"></span><span class="qbar"></span><span class="qbar"></span><span class="qbar"></span><span class="qbar"></span><span class="qbar"></span><span class="qbar"></span><span class="qbar"></span><span class="qbar"></span><span class="qbar"></span><span class="qbar"></span><span class="qbar"></span><span class="qbar"></span><span class="qbar"></span>
+              <span class="qbar"></span><span class="qbar"></span><span class="qbar"></span><span class="qbar"></span><span class="qbar"></span><span class="qbar"></span><span class="qbar"></span><span class="qbar"></span><span class="qbar"></span><span class="qbar"></span><span class="qbar"></span><span class="qbar"></span><span class="qbar"></span><span class="qbar"></span><span class="qbar"></span><span class="qbar"></span><span class="qbar"></span><span class="qbar"></span><span class="qbar"></span><span class="qbar"></span><span class="qbar"></span><span class="qbar"></span><span class="qbar"></span><span class="qbar"></span>
+              <span class="qbar"></span><span class="qbar"></span><span class="qbar"></span><span class="qbar"></span><span class="qbar"></span><span class="qbar"></span><span class="qbar"></span><span class="qbar"></span><span class="qbar"></span><span class="qbar"></span><span class="qbar"></span><span class="qbar"></span><span class="qbar"></span><span class="qbar"></span><span class="qbar"></span><span class="qbar"></span><span class="qbar"></span><span class="qbar"></span><span class="qbar"></span><span class="qbar"></span><span class="qbar"></span><span class="qbar"></span><span class="qbar"></span><span class="qbar"></span>
+            </div>
+          </div>
+        </section>
+
+        <div class="cta" aria-label="Contact links">
+          <a class="btn" href="mailto:faizp.dev@gmail.com" aria-label="Email Faiz">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M4 6h16v12H4V6Z" stroke="currentColor" stroke-width="2"/>
+              <path d="m4 7 8 6 8-6" stroke="currentColor" stroke-width="2"/>
+            </svg>
+            Email
+          </a>
+
+          <a class="btn" href="https://calendar.app.google/MaS4FVKTaFeVHFof7" target="_blank" rel="noreferrer" aria-label="Book a call with Faiz">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M7 3v3M17 3v3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M4 8h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M6 6h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="2"/>
+              <path d="M8 12h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            Book a call
+          </a>
+
+          <a class="btn" href="https://www.linkedin.com/in/faiz-p" target="_blank" rel="noreferrer" aria-label="Faiz on LinkedIn">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M6 9v12" stroke="currentColor" stroke-width="2"/>
+              <path d="M6 6.5a1.5 1.5 0 1 0 0-.01" stroke="currentColor" stroke-width="2"/>
+              <path d="M10 21v-7a4 4 0 0 1 8 0v7" stroke="currentColor" stroke-width="2"/>
+            </svg>
+            LinkedIn
+          </a>
+
+          <a class="btn" href="https://github.com/faizp" target="_blank" rel="noreferrer" aria-label="Faiz on GitHub">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M9 19c-4 1.5-4-2.5-6-3m12 6v-3.5c0-1 .1-1.5-.5-2 2 0 4-.5 4-4.5 0-1-.4-2-1-2.5.1-.3.5-1.5-.1-2.5 0 0-1-.3-2.5 1A9 9 0 0 0 12 6a9 9 0 0 0-2.9.5c-1.5-1.3-2.5-1-2.5-1-.6 1-.2 2.2-.1 2.5-.6.5-1 1.5-1 2.5 0 4 2 4.5 4 4.5-.3.3-.5.9-.5 2V22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            GitHub
+          </a>
+        </div>
+
+        <div class="meta">
+          <div>© 2025 Faiz</div>
+          <div>
+            <a href="#" onclick="navigator.clipboard?.writeText(window.location.href); return false;">Copy link</a>
+            <span style="opacity:.45">•</span>
+            <span>Bengaluru</span>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</body>
+</html>
