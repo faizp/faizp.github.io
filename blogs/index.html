@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Blogs — Writing by Faiz on backend engineering, video platforms, and systems design.">
+  <title>Blogs | Faiz</title>
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <script>
+    (function() {
+      var scheme = localStorage.getItem('user-color-scheme');
+      if (scheme === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+    })();
+  </script>
+</head>
+<body>
+
+  <a class="skip-link" href="#main">Jump to content</a>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/" class="site-title">
+        <span class="wordmark">F<span class="wordmark-collapse">ai</span>z<span class="wordmark-dot">.</span></span>
+        <span class="version-badge">v. II</span>
+      </a>
+      <nav class="nav-links" id="nav" aria-label="Main navigation">
+        <a href="/about/">About</a>
+        <a href="/work/">Work</a>
+        <a href="/projects/">Projects</a>
+        <a href="/blogs/" aria-current="page">Blogs</a>
+        <a href="/archive/">Archive</a>
+        <button class="mode-toggle" id="modeToggle" aria-label="Toggle color mode">
+          <svg class="mode-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"/>
+          </svg>
+          mode
+        </button>
+      </nav>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" aria-expanded="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <line x1="3" y1="12" x2="21" y2="12"/>
+          <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <main class="site-main" id="main">
+    <h1 class="page-title">Blogs</h1>
+    <p class="page-subtitle">Writing about backend engineering, video platforms, systems design, and things I've learned along the way.</p>
+
+    <div class="thoughts-list">
+      <div class="thought-item" style="cursor: default;">
+        <div class="thought-title" style="color: var(--text-muted);">Coming soon</div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-links">
+        <a href="mailto:faizp.dev@gmail.com">Email</a>
+        <a href="https://www.linkedin.com/in/faiz-p" target="_blank" rel="noreferrer">LinkedIn</a>
+        <a href="https://github.com/faizp" target="_blank" rel="noreferrer">GitHub</a>
+      </div>
+      <div class="footer-meta">
+        <span>&copy; 2025 Faiz</span>
+        <span style="opacity:.4">&middot;</span>
+        <button class="copy-link-btn" onclick="navigator.clipboard?.writeText(window.location.href); this.textContent='Copied!'; setTimeout(() => this.textContent='Copy link', 1500);">Copy link</button>
+        <span style="opacity:.4">&middot;</span>
+        <span>Bengaluru</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    (function() {
+      var toggle = document.getElementById('modeToggle');
+      var html = document.documentElement;
+      function updateIcon() {
+        var isDark = html.getAttribute('data-theme') === 'dark';
+        toggle.querySelector('.mode-icon').innerHTML = isDark
+          ? '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>'
+          : '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>';
+      }
+      toggle.addEventListener('click', function() {
+        var isDark = html.getAttribute('data-theme') === 'dark';
+        if (isDark) { html.removeAttribute('data-theme'); localStorage.setItem('user-color-scheme', 'light'); }
+        else { html.setAttribute('data-theme', 'dark'); localStorage.setItem('user-color-scheme', 'dark'); }
+        updateIcon();
+      });
+      updateIcon();
+    })();
+
+    // Wordmark collapse on scroll
+    (function() {
+      var header = document.querySelector('.site-header');
+      var scrolled = false;
+      function onScroll() {
+        var shouldCollapse = window.scrollY > 50;
+        if (shouldCollapse !== scrolled) {
+          scrolled = shouldCollapse;
+          if (scrolled) {
+            header.classList.add('is-collapsed');
+          } else {
+            header.classList.remove('is-collapsed');
+          }
+        }
+      }
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+    })();
+
+    // Mobile nav toggle
+    (function() {
+      var btn = document.getElementById('navToggle');
+      var nav = document.getElementById('nav');
+      btn.addEventListener('click', function() {
+        var expanded = btn.getAttribute('aria-expanded') === 'true';
+        btn.setAttribute('aria-expanded', !expanded);
+        nav.classList.toggle('open');
+      });
+    })();
+  </script>
+</body>
+</html>
