@@ -27,11 +27,11 @@
 
 [data-theme="dark"] {
   --bg: #0f0f14;
-  --bg-alt: #1a1a22;
-  --surface: #1e1e28;
-  --text: #e8e8ed;
-  --text-muted: rgba(232, 232, 237, 0.6);
-  --text-faint: rgba(232, 232, 237, 0.32);
+  --bg-alt: #111118;
+  --surface: #151520;
+  --text: #f2f2f7;
+  --text-muted: rgba(242, 242, 247, 0.68);
+  --text-faint: rgba(242, 242, 247, 0.4);
   --accent: #5ea1ff;
   --accent-hover: #7db5ff;
   --border: rgba(232, 232, 237, 0.08);
@@ -136,7 +136,7 @@ ul, ol {
 }
 
 .site-title {
-  font-size: 16px;
+  font-size: 20px;
   font-weight: 700;
   letter-spacing: -0.02em;
   color: var(--text);
@@ -996,7 +996,6 @@ ul, ol {
 .featured-card {
   display: block;
   border: 1px solid var(--border);
-  border-left: 3px solid var(--accent);
   border-radius: var(--radius);
   background: var(--surface);
   padding: 20px;
@@ -1008,7 +1007,6 @@ ul, ol {
   transform: translateY(-2px);
   box-shadow: var(--shadow-md);
   border-color: var(--border-strong);
-  border-left-color: var(--accent-hover);
   color: var(--text);
 }
 
