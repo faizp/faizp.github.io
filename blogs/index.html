@@ -9,7 +9,7 @@
   <script>
     (function() {
       var scheme = localStorage.getItem('user-color-scheme');
-      if (scheme === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+      if (scheme !== 'light') document.documentElement.setAttribute('data-theme', 'dark');
     })();
   </script>
 </head>

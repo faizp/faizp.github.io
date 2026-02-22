@@ -7,10 +7,10 @@
   <title>Faiz — Engineer for the Backend</title>
   <link rel="stylesheet" href="/assets/css/style.css">
   <script>
-    // Persist color scheme before render to prevent flash
+    // Persist color scheme before render to prevent flash (dark mode is default)
     (function() {
       var scheme = localStorage.getItem('user-color-scheme');
-      if (scheme === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+      if (scheme !== 'light') document.documentElement.setAttribute('data-theme', 'dark');
     })();
   </script>
 </head>
