@@ -71,14 +71,14 @@
             <span class="terminal-dot terminal-dot--yellow"></span>
             <span class="terminal-dot terminal-dot--green"></span>
           </div>
-          <div class="terminal-title">faiz@site ~ %</div>
+          <div class="terminal-title">faiz@site /home/ %</div>
         </div>
         <div class="terminal-body" id="terminalBody">
           <div class="terminal-output" id="terminalOutput">
             <div class="terminal-output-line">Welcome! Type <span class="terminal-accent">help</span> to see available commands.</div>
           </div>
           <div class="terminal-input-line">
-            <span class="terminal-prompt">~&nbsp;%&nbsp;</span>
+            <span class="terminal-prompt">/home/&nbsp;%&nbsp;</span>
             <input class="terminal-input" id="terminalInput" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" aria-label="Terminal input">
           </div>
         </div>
@@ -251,6 +251,12 @@
         archive: '/archive/'
       };
 
+      var projects = {
+        'tessact-ai': { name: 'Tessact AI', url: 'https://tessact.ai' },
+        'realtimekit': { name: 'RealtimeKit', url: 'https://github.com/faizp/RealtimeKit' },
+        'todo-mcp': { name: 'Todo MCP', url: 'https://github.com/faizp/ZenList' }
+      };
+
       var commands = {
         help: function() {
           return [
@@ -261,7 +267,9 @@
             '  work       — career timeline',
             '  projects   — things I\'ve built',
             '  blogs      — recent writing',
-            '  ls         — list site sections',
+            '  pwd        — print working directory',
+            '  cd &lt;dir&gt;   — navigate to a section or project',
+            '  ls [dir]   — list site sections or projects',
             '  clear      — clear terminal',
             '',
             'Type a section name to navigate there.'
@@ -307,10 +315,11 @@
             '→ <a href="/blogs/">View all posts</a>'
           ].join('\n');
         },
+        pwd: function() {
+          return '/home/';
+        },
         ls: function() {
-          return [
-            'about/    work/    projects/    blogs/    archive/'
-          ].join('\n');
+          return 'about/    work/    projects/    blogs/    archive/';
         },
         clear: function() {
           output.innerHTML = '';
@@ -329,7 +338,51 @@
         cmd = cmd.trim().toLowerCase();
         if (!cmd) return;
 
-        addLine('<span class="terminal-prompt-echo">~ % </span>' + cmd.replace(/</g, '&lt;').replace(/>/g, '&gt;'));
+        var escaped = cmd.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        addLine('<span class="terminal-prompt-echo">/home/ % </span>' + escaped);
+
+        // Handle "ls" with arguments
+        if (cmd === 'ls projects' || cmd === 'ls projects/') {
+          addLine('<pre class="terminal-pre">tessact-ai/    realtimekit/    todo-mcp/</pre>');
+          body.scrollTop = body.scrollHeight;
+          return;
+        }
+
+        // Handle "cd" command
+        if (cmd === 'cd' || cmd === 'cd ~' || cmd === 'cd /' || cmd === 'cd /home' || cmd === 'cd /home/') {
+          addLine('<pre class="terminal-pre">/home/</pre>');
+          body.scrollTop = body.scrollHeight;
+          return;
+        }
+        if (cmd === 'cd ..') {
+          addLine('<pre class="terminal-pre">already at root</pre>');
+          body.scrollTop = body.scrollHeight;
+          return;
+        }
+        if (cmd.indexOf('cd ') === 0) {
+          var target = cmd.slice(3).replace(/\/+$/, '');
+          // cd projects/<name>
+          if (target.indexOf('projects/') === 0) {
+            var proj = target.slice(9);
+            if (projects[proj]) {
+              addLine('Opening ' + projects[proj].name + ' ...');
+              setTimeout(function() { window.open(projects[proj].url, '_blank'); }, 400);
+            } else {
+              addLine('cd: no such directory: ' + target.replace(/</g, '&lt;').replace(/>/g, '&gt;'));
+            }
+            body.scrollTop = body.scrollHeight;
+            return;
+          }
+          // cd <page>
+          if (pages[target]) {
+            addLine('Navigating to /' + target + '/ ...');
+            setTimeout(function() { window.location.href = pages[target]; }, 400);
+          } else {
+            addLine('cd: no such directory: ' + target.replace(/</g, '&lt;').replace(/>/g, '&gt;'));
+          }
+          body.scrollTop = body.scrollHeight;
+          return;
+        }
 
         if (commands[cmd]) {
           var result = commands[cmd]();
@@ -340,7 +393,7 @@
           addLine('Navigating to /' + cmd + '/ ...');
           setTimeout(function() { window.location.href = pages[cmd]; }, 400);
         } else {
-          addLine('command not found: ' + cmd.replace(/</g, '&lt;').replace(/>/g, '&gt;') + ' — try <span class="terminal-accent">help</span>');
+          addLine('command not found: ' + escaped + ' — try <span class="terminal-accent">help</span>');
         }
 
         body.scrollTop = body.scrollHeight;
