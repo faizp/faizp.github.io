@@ -71,14 +71,14 @@
             <span class="terminal-dot terminal-dot--yellow"></span>
             <span class="terminal-dot terminal-dot--green"></span>
           </div>
-          <div class="terminal-title">faiz@site /home/ %</div>
+          <div class="terminal-title">faiz@site ~ %</div>
         </div>
         <div class="terminal-body" id="terminalBody">
           <div class="terminal-output" id="terminalOutput">
             <div class="terminal-output-line">Welcome! Type <span class="terminal-accent">help</span> to see available commands.</div>
           </div>
           <div class="terminal-input-line">
-            <span class="terminal-prompt">/home/&nbsp;%&nbsp;</span>
+            <span class="terminal-prompt">~&nbsp;%&nbsp;</span>
             <input class="terminal-input" id="terminalInput" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" aria-label="Terminal input">
           </div>
         </div>
@@ -339,7 +339,7 @@
         if (!cmd) return;
 
         var escaped = cmd.replace(/</g, '&lt;').replace(/>/g, '&gt;');
-        addLine('<span class="terminal-prompt-echo">/home/ % </span>' + escaped);
+        addLine('<span class="terminal-prompt-echo">~ % </span>' + escaped);
 
         // Handle "ls" with arguments
         if (cmd === 'ls projects' || cmd === 'ls projects/') {
